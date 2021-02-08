@@ -34,7 +34,7 @@ Server running on port 3000
 ### Example usage
 Authenticate as the existing default user:
 ```bash 
-curl --location --request GET 'localhost:3000/user?username=admin&password=password@123'
+curl --location --request GET 'localhost:3000/user?username=defaultuser&password=password@123'
 
 {"id":"defaultuser","role":"user"}
 ```
