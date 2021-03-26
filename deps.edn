@@ -12,6 +12,14 @@
                                                 :sha     "cbbafd6abe71e1d1da714701b973c3c156f87d58"}
 
            ;; For clojurescript only
+           thheller/shadow-cljs                {:mvn/version "2.11.3"}
+           com.fulcrologic/fulcro              {:mvn/version "3.4.4"}
+           com.fulcrologic/fulcro-garden-css   {:mvn/version "3.0.8"}
+           com.fulcrologic/semantic-ui-wrapper {:mvn/version "1.0.1"}
+           com.fulcrologic/guardrails          {:mvn/version "0.0.12"}
+           garden/garden                       {:mvn/version "1.3.9"}
+           hiccup/hiccup                       {:mvn/version "1.0.5"}
+           fulcrologic/fulcro-spec             {:mvn/version "3.1.8"}
            }
  :aliases {:server   {:extra-paths ["src/clj"]
                       :main-opts   ["-m" "app.core"]}
