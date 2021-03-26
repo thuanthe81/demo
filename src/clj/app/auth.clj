@@ -1,10 +1,19 @@
 (ns app.auth
   (:require [clojure.string :as str]))
 
+
+(def roles [:admin
+            :user])
+
 ; an in memory database of registered users
-(defonce user-database (atom {"defaultuser" {:id       "defaultuser"
-                                             :password "password@123"
-                                             :role     :user}}))
+(defonce user-database (atom {"admin"       {:id          "admin"
+                                             :password    "admin@123"
+                                             :role        :admin
+                                             :last-update (System/currentTimeMillis)}
+                              "defaultuser" {:id          "defaultuser"
+                                             :password    "password@123"
+                                             :role        :user
+                                             :last-update (System/currentTimeMillis)}}))
 
 
 (defn password-rules
@@ -31,11 +40,17 @@
 (defn authenticate-user
   "Returns a user map when a username and password are correct, or nil when incorrect"
   [db username password]
-  (when-let [{known-password :password :as user} (get db (str/lower-case username))]
+  (let [{known-password :password :as user} (get db (str/lower-case username))]
     (if (= password known-password)
       (dissoc user :password)
       (throw (ex-info "Invalid username or password"
                       {:reason :login.error/invalid-credentials})))))
+
+(defn get-user
+  [db username]
+  (-> db
+      (get (str/lower-case username))
+      (dissoc :password)))
 
 (defn create-user
   "Create a user by adding them to the database, and returns the user's details except for their password"
@@ -62,3 +77,11 @@
            (get username)
            ; strip their password
            (dissoc :password))))))
+
+(defn update-user
+  [db-atom username new-info]
+  "Update user information"
+  (->> (System/currentTimeMillis)
+       (assoc new-info :last-update)
+       (swap! db-atom update-in [username] merge))
+  (get-in @db-atom [username]))

@@ -2,3 +2,9 @@
 .idea/
 .nrepl-port
 *.iml
+.gradle
+.shadow-cljs
+node_modules
+resources/public/js/main.js
+resources/public/js/manifest.edn
+resources/public/js/cljs-runtime
