@@ -30,12 +30,12 @@
                                         keyword))
              (assoc request :auth-user)
              handler)
-        {:status 403
+        {:status 401
          :body {:un-authorized "Unauthorized"}})
       (catch Exception ex
         (let [d (ex-data ex)]
           (if (:un-authorized d)
-            {:status 403
+            {:status 401
              :body   d}
             (throw ex)))))))
 
@@ -50,7 +50,7 @@
       (cond
         (= auth-role :admin) (handler request)
         (= auth-role role) (handler request)
-        :else {:status 400
+        :else {:status 403
                :body   {:bad-request (str "Require you as " (name role))}}) )))
 
 (defn grant-authorized-user-or-admin

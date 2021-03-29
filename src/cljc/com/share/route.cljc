@@ -7,6 +7,7 @@
     ["/:username"
      [""  ::user]
      ["/login" ::user-login]
+     ["/refresh-token" ::user-refresh-token]
      ["/role"  ::user-role]]]
    ["/export"
     ["/excel" ::export-excel]

@@ -1,7 +1,6 @@
 (ns app.handlers.user
   (:require [app.auth :as auth]
-            [app.jwt :as jwt])
-  (:import (java.util Date)))
+            [app.jwt :as jwt]))
 
 
 (defn create-user-handler
@@ -16,9 +15,22 @@
       {:status 400
        :body   (ex-data e)})))
 
+
+(defn get-users-handler
+  "Get all users in database."
+  [_]
+  (try
+    {:status 200
+     :body   {:users (->> @auth/user-database
+                          vals
+                          (map #(select-keys % [:id :role])))}}
+    (catch Exception ex
+      {:status 400
+       :body (ex-data ex)})))
+
 (defn validate-jwt-token
-  [jwt-token]
   "Return user when jwt-token is valid."
+  [jwt-token]
   (let [{:as   user
          :keys [id
                 login-at]} (jwt/->data jwt-token)
@@ -39,12 +51,31 @@
   [{{{:keys [password]} :body
      {:keys [username]} :path} :parameters}]
   (try
-    (let [jwt-token (-> (auth/authenticate-user @auth/user-database username password)
-                        (select-keys [:id :role :last-update])
-                        (assoc :login-at (System/currentTimeMillis))
-                        jwt/->jwt-token)]
+    (if-let [jwt-token (some-> (auth/authenticate-user @auth/user-database username password)
+                               (select-keys [:id :role :last-update])
+                               (assoc :login-at (System/currentTimeMillis))
+                               jwt/->jwt-token)]
       {:status 200
-       :body   {:jwt-token jwt-token}})
+       :body   {:jwt-token jwt-token}}
+      {:status 404
+       :body   {:not-found "Not found user"}})
+    (catch Exception e
+      {:status 401
+       :body   (ex-data e)})))
+
+
+(defn refresh-token-handler
+  "A web handler to refresh access user-api token."
+  [{{:keys [id]} :auth-user}]
+  (try
+    (if-let [jwt-token (some-> (auth/get-user @auth/user-database id)
+                               (select-keys [:id :role :last-update])
+                               (assoc :login-at (System/currentTimeMillis))
+                               jwt/->jwt-token)]
+      {:status 200
+       :body   {:jwt-token jwt-token}}
+      {:status 404
+       :body   {:not-found "Not found user"}})
     (catch Exception e
       {:status 401
        :body   (ex-data e)})))

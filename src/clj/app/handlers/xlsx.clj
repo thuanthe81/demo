@@ -21,14 +21,14 @@
 (defn handler-export
   "Handler to export excel file. Response file exported."
   [{{sheets :body} :parameters}]
-  (try (let [uuid (UUID/randomUUID)
+  (try (let [uuid      (UUID/randomUUID)
              file-path (->file-path uuid)]
          (io/make-parents file-path)
          (->> sheets
               xlsx/->excel-byte-array
               (xlsx/write-file file-path))
          {:status 200
-          :body {:id uuid}})
+          :body   {:id uuid}})
        (catch Exception ex
          {:status 500
           :body   (ex-data ex)})))

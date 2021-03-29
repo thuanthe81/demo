@@ -62,7 +62,7 @@
                     (catch Exception ex
                       (ex-data ex)))
                :status)
-           400))
+           403))
     (is (= (-> (try (j-http :post "http://localhost:3000/api/users"
                             {:headers     {:authorization (str "Bearer " jwt)}
                              :form-params {:username "newuser"
@@ -70,7 +70,7 @@
                     (catch Exception ex
                       (ex-data ex)))
                :status)
-           400)))
+           403)))
   ;; admin role
   (let [jwt (-> (j-http :post
                         "http://localhost:3000/api/users/admin/login"

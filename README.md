@@ -33,3 +33,36 @@ Server running on port 3000
 ```
 Open swagger, try to use api by fill required fields of api.
 [swagger][http://localhost:3000/demo-swagger]
+
+# Simple Web Application
+This is a simple web-app to perform some rest apis. Some functions of this app:
+* Login/logout
+* Export users into excel file.
+* Download exported file.
+
+### Release mode
+There is no http server for web-app in release mode.
+To run it need to setup nginx to server static web-app in resources/public.
+
+Release build:
+```bash
+# Install npm package
+npm i
+# build css
+gulp b
+# Build js
+shadow-cljs -M:frontend release frontend
+```
+### Dev mode
+Start each session below in separate console:
+```bash 
+# watch css
+gulp w
+```
+```bash 
+# watch js
+shadow-cljs -M:frontend watch frontend
+```
+Open app by link [localhost][http://localhost:3001]
+
+*** Notes: Normal user don't have much function on this app. Please login with admin user.
