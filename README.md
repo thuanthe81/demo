@@ -13,7 +13,7 @@ Default swagger path: [swagger][http://localhost:3000/demo-swagger].
 # Authentication
 ### User Accounts
 This project has simple DB. This stored 2 users:
-* normal user with: username `defaultuser`, password `password@123` 
+* normal user with: username `defaultuser`, password `password@123`
 * admin user with:   username `admin`, password `admin@123`
 ### JWT Authentication
 Bearer authorization method was applied in this project.
@@ -27,7 +27,7 @@ Then use received JWT Token to fill `Bearer <jwt-token>` for header authorizatio
 ### Getting Started
 Start the server on `localhost:3000`
 ```bash
-$ clj -A:server
+$ clj -M:server
 2020-09-28 09:27:18.207:INFO:oejs.Server:main: Started @3729ms
 Server running on port 3000
 ```
@@ -51,17 +51,17 @@ npm i
 # build css
 gulp b
 # Build js
-shadow-cljs -M:frontend release frontend
+shadow-cljs -A:frontend release frontend
 ```
 ### Dev mode
 Start each session below in separate console:
-```bash 
+```bash
 # watch css
 gulp w
 ```
-```bash 
+```bash
 # watch js
-shadow-cljs -M:frontend watch frontend
+shadow-cljs -A:frontend watch frontend
 ```
 Open app by link [localhost][http://localhost:3001]
 
